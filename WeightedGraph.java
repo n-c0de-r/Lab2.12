@@ -27,13 +27,18 @@ public class WeightedGraph {
 			int weight = currentEdge.weight;
 			
 			matrix[startVertex][endVertex] = weight;
+			matrix[endVertex][startVertex] = weight;
 		}
 	}
 	
 	public void checkMatrix() {
 		for (int i=1; i<vertex+1; i++) {
-			for (int j=1; j<vertex+1; j++) {
-				System.out.print(matrix[i][j]);
+			for (int j=i; j<vertex+1; j++) {
+				if (matrix[i][j] <10) {
+					System.out.print("0" + matrix[i][j] + " ");
+				} else {
+					System.out.print(matrix[i][j] + " ");
+				}
 			}
 			System.out.println();
 		}
