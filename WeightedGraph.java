@@ -38,11 +38,7 @@ public class WeightedGraph {
 	 * @param start	The vertex to start path from.
 	 * @param goal	The goal vertex to get to.
 	 */
-	public void checkMatrix(int start, int goal) {
-		//Get the starting and goal vertex
-		Vertex begin = vertices.get(start);
-		Vertex end = vertices.get(goal);
-		
+	public void checkMatrix(int start, int goal) {		
 		//Set the distance of the first vertex to zero.
 		//And make it the next to be checked
 		vertices.get(start).setDistance(0);
@@ -89,7 +85,7 @@ public class WeightedGraph {
 				i = nextCheck-1;
 			}
 		}
-		getPath(end);
+		getPath(vertices.get(goal));
 	}
 	
 	/**
@@ -141,6 +137,7 @@ public class WeightedGraph {
 	
 	/**
 	 * Creates a basic testing graph.
+	 * Getting from A to E.
 	 */
 	public void testGraph() {
 		//Create an ArrayList of vertices
