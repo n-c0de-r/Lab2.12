@@ -10,7 +10,8 @@ public class Vertex {
 
 	private String name;
 	private Vertex previous;
-	private int distance = Integer.MAX_VALUE;
+	private int distance;
+	private boolean visited;
 	
 	/**
 	 * Full constructor of the Vertex class.
@@ -18,11 +19,13 @@ public class Vertex {
 	 * @param str	Contains the name of the Vertex.
 	 * @param prev	Contains the previous neighboring Vertex.
 	 * @param dist	The minimum distance to this Vertex.
+	 * @param visit	Boolean if the Vertex is visited.
 	 */
-	public Vertex (String str, Vertex prev, int dist) {
+	public Vertex (String str, Vertex prev, int dist, boolean visit) {
 		name = str;
 		previous = prev;
 		distance = dist;
+		visited = visit;
 	}
 	
 	/**
@@ -31,7 +34,7 @@ public class Vertex {
 	 * @param str	Contains the name of the Vertex.
 	 */
 	public Vertex (String str) {
-		name = str;
+		this(str, null, Integer.MAX_VALUE, false);
 	}
 	
 	/**
@@ -59,6 +62,14 @@ public class Vertex {
 	}
 	
 	/**
+	 * Get the visited status of this vertex.
+	 * @return Visited status of the Vertex.
+	 */
+	public boolean isVisited() {
+		return visited;
+	}
+	
+	/**
 	 * Set the name of this vertex.
 	 * @param str	String with the new name.
 	 */
@@ -80,5 +91,13 @@ public class Vertex {
 	 */
 	public void setDistance(int dist) {
 		distance = dist;
+	}
+	
+	/**
+	 * Set the visited status of this vertex.
+	 * @param visit	Set if this Vertex was visited.
+	 */
+	public void setVisited(boolean visit) {
+		visited = visit;
 	}
 }
