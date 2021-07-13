@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /**
  * Main running class.
  * 
@@ -15,13 +13,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
-		NameGenerator n = new NameGenerator();
-		ArrayList<String> names = n.getNames();
-		
 		WeightedGraph g = new WeightedGraph();
-		g.setupGraph();
-		g.checkMatrix();
+		g.testGraph();
+		g.checkMatrix(0,4);
 	}
-	
-
 }
