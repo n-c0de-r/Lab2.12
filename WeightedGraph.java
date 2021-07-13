@@ -39,49 +39,70 @@ public class WeightedGraph {
 	 * @param goal	The goal vertex to get to.
 	 */
 	public void checkMatrix(int start, int goal) {
-		vertices.get(start).setDistance(0);
+		//Get the starting and goal vertex
+		Vertex begin = vertices.get(start);
 		Vertex end = vertices.get(goal);
-		int nextCheck = 0;
 		
+		//Set the distance of the first vertex to zero.
+		//And make it the next to be checked
+		vertices.get(start).setDistance(0);
+		int nextCheck = start;
+		
+		//Check the respective Vertex and it's connections
 		for (int i=nextCheck; i < vertices.size(); i++) {
-
+			
+			//If it has been visited, check the next in line
 			if (vertices.get(i).isVisited()) {
-				i++;
+				i++; //Skip current vertex
+				
 			} else {
-				
+				//Set the smallest distance to infinity
 				int smallestDist = Integer.MAX_VALUE;
-				
+				//Set the 
 				Vertex thisVertex = vertices.get(i);
-
-				int thisDist = thisVertex.getDistance();
-				if (thisVertex.isVisited() && !(nextCheck == vertices.size()-1)) {
-					nextCheck++;
-					thisVertex = vertices.get(nextCheck);
-				}
 				
+				//Get the distance of the currently checked vertex.
+				int thisDist = thisVertex.getDistance();
 				
 				for (int j=0; j < vertices.size(); j++) {
-					
+					//Same as above for connected vertices
 					Vertex current = vertices.get(j);
 					
+					//If the calculated distance is less than the current, recalculate it
 					if (matrix[i][j] !=0 && ((thisDist + matrix[i][j]) < current.getDistance()) && !thisVertex.isVisited()) {
-
+						
+						//Set the checked vortex' predecessor to the main one accordingly
+						//And recalculate the distance to sum of this vertex and the edges weight.
 						current.setPrevious(thisVertex);
 						current.setDistance(thisDist + matrix[i][j]);
 
+						//re-calibrate the current rows smallest distance, to find the next vertex to check
 						if (thisDist + matrix[i][j] < smallestDist) {
 							smallestDist = thisDist + matrix[i][j];
 							nextCheck = j;
 						}
 					}
 				}
+				//After all connections are checked, this main vertex is done & visited!
 				thisVertex.setVisited(true);
+				//Reduce by one, as auto-increment will correct in the next for-run
 				i = nextCheck-1;
 			}
 		}
+		getPath(end);
+	}
+	
+	/**
+	 * Method that returns the resulting path.
+	 * @param end	The goal vertex.
+	 */
+	private void getPath(Vertex end) {
+		//After all is done, print out all distances. not really needed.
 //		for (Vertex v : vertices) {
 //			System.out.println("Distance to " + v.getName() + " is " + v.getDistance());
 //		}
+		
+		//When all is finished print the cheapest path to the end
 		System.out.println("Cheapest path to " + end.getName() + " is " + end.getDistance());
 		String endName = end.getName();
 		String path = endName;
@@ -96,6 +117,10 @@ public class WeightedGraph {
 		System.out.println("Path to " + endName + " is " + path);
 	}
 	
+	/**
+	 * Generates edges for the matrix.
+	 * @param num	Number of edges to create.
+	 */
 	private void generateEdges(int num) {
 		edgeList = new ArrayList<Edge>();
 		for (int i=0; i < num; i++) {
@@ -103,7 +128,14 @@ public class WeightedGraph {
 		}
 	}
 	
+	/**
+	 * Generates vertices for the matrix.
+	 * @param num	Number of vertices to create.
+	 */
 	private void generateVertices(int num) {
+		NameGenerator n = new NameGenerator();
+		ArrayList<String> names = n.getNames();
+		
 		vertices = new ArrayList<>();
 	}
 	
@@ -141,10 +173,10 @@ public class WeightedGraph {
 		
 		//Fill the matrix with weights of the edges
 		for (int i=0; i<edgeList.size(); i++) {
-			Edge currentEdge2 = edgeList.get(i);
-			Vertex startVertex = currentEdge2.startVertex;
-			Vertex endVertex = currentEdge2.endVertex;
-			int weight = currentEdge2.weight;
+			Edge currentEdge = edgeList.get(i);
+			Vertex startVertex = currentEdge.startVertex;
+			Vertex endVertex = currentEdge.endVertex;
+			int weight = currentEdge.weight;
 			
 			matrix[vertices.indexOf(startVertex)][vertices.indexOf(endVertex)] = weight;
 			matrix[vertices.indexOf(endVertex)][vertices.indexOf(startVertex)] = weight;
