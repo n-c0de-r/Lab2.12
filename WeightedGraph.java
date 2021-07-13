@@ -63,16 +63,10 @@ public class WeightedGraph {
 			int smallestDist = Integer.MAX_VALUE;
 
 			Vertex thisVertex = vertices.get(i);
-			int thisDist = vertices.get(i).getDistance();
+			int thisDist = thisVertex.getDistance();
 
 			for (int j=0; j < vertex; j++) {
 				Vertex current = vertices.get(j);
-
-				if (matrix[i][j] <10) {
-					System.out.print("0" + matrix[i][j] + " ");
-				} else {
-					System.out.print(matrix[i][j] + " ");
-				}
 				
 				if (matrix[i][j] !=0 && thisDist + matrix[i][j] < current.getDistance()) {
 					current.setPrevious(thisVertex);
@@ -84,14 +78,28 @@ public class WeightedGraph {
 					}
 				}
 			}
-			System.out.println();
-			if (!end.getName().equals("E")) {
+			if (!thisVertex.getName().equals(end.getName())) {
 				i = nextCheck-1;
 				
 			} else {
 				continue;
 			}
 		}
+		for (Vertex v : vertices) {
+			System.out.println("Distance to " + v.getName() + " is " + v.getDistance());
+		}
+		System.out.println("Shortest path to " + end.getName() + " is " + end.getDistance());
+		String endName = end.getName();
+		String path = endName;
+		String lastName = "";
+		Vertex checking = end;
+		while (checking.getPrevious() != null) {
+			checking = checking.getPrevious();
+			lastName = checking.getName();
+			path = path + " <-- " + lastName;
+			
+		}
+		System.out.println("Path to " + endName + " is " + path);
 	}
 	
 }
