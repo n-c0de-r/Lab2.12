@@ -2,9 +2,9 @@
  * Class creating Vertices. Each storing their name
  * the previous vertex in the path and distance to it.
  * 
- * @author n-c0de-r
- * @author AlexanderStae
- * @version 11.07.2021
+ * @author	n-c0de-r
+ * @author	AlexanderStae
+ * @version	11.07.2021
  */
 public class Vertex {
 
@@ -12,11 +12,27 @@ public class Vertex {
 	private Vertex previous;
 	private int distance = Integer.MAX_VALUE;
 	
-//	public Vertex (String str, Vertex prev, int dist) {
-//		name = str;
-//		previous = prev;
-//		distance = dist;
-//	}
+	/**
+	 * Full constructor of the Vertex class.
+	 * 
+	 * @param str	Contains the name of the Vertex.
+	 * @param prev	Contains the previous neighboring Vertex.
+	 * @param dist	The minimum distance to this Vertex.
+	 */
+	public Vertex (String str, Vertex prev, int dist) {
+		name = str;
+		previous = prev;
+		distance = dist;
+	}
+	
+	/**
+	 * Smaller constructor of the Vertex class, name only.
+	 * 
+	 * @param str	Contains the name of the Vertex.
+	 */
+	public Vertex (String str) {
+		name = str;
+	}
 	
 	/**
 	 * Get the vertex's name.
