@@ -57,24 +57,40 @@ public class WeightedGraph {
 	 * Checks the matrix created above.
 	 */
 	public void checkMatrix() {
-		for (int i=0; i<vertex; i++) {
-			System.out.println("Current Vertex is " + vertices.get(i).getName());
-			System.out.println("Vertex Distance is " + vertices.get(i).getDistance());
-			for (int j=0; j<vertex; j++) {
+		Vertex end = vertices.get(4);
+		int nextCheck = 0;
+		for (int i=nextCheck; i < vertex; i++) {
+			int smallestDist = Integer.MAX_VALUE;
+
+			Vertex thisVertex = vertices.get(i);
+			int thisDist = vertices.get(i).getDistance();
+
+			for (int j=0; j < vertex; j++) {
+				Vertex current = vertices.get(j);
+
 				if (matrix[i][j] <10) {
 					System.out.print("0" + matrix[i][j] + " ");
 				} else {
 					System.out.print(matrix[i][j] + " ");
 				}
-				int thisDist = vertices.get(i).getDistance();
-				if (matrix[i][j]!=0 && thisDist<thisDist+matrix[i][j]) {
-					vertices.get(j).setPrevious(vertices.get(i));
-					vertices.get(j).setDistance(vertices.get(i).getDistance()+matrix[i][j]);
+				
+				if (matrix[i][j] !=0 && thisDist + matrix[i][j] < current.getDistance()) {
+					current.setPrevious(thisVertex);
+					current.setDistance(thisDist + matrix[i][j]);
 					
-					System.out.println("Distance to " + vertices.get(j).getName() + " is " + vertices.get(j).getDistance());
+					if (thisDist + matrix[i][j] < smallestDist) {
+						smallestDist = thisDist + matrix[i][j];
+						nextCheck = j;
+					}
 				}
 			}
 			System.out.println();
+			if (!end.getName().equals("E")) {
+				i = nextCheck-1;
+				
+			} else {
+				continue;
+			}
 		}
 	}
 	
