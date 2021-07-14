@@ -14,22 +14,20 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+		System.out.println("----------Weighted Graph----------");
+		System.out.println();
 		WeightedGraph g = new WeightedGraph();
-		g.testGraph();
-		g.cheapestPath(0,4);
-		g.shortestPath(0, 4);
+		g.cheapestPath(0, 4);
+//		g.shortestPath(0, 4);
+		
+		System.out.println();
+		System.out.println();
+		System.out.println("----------Random Graph----------");
+		System.out.println();
 		
 		//Generate random numbers as start and end points
-//		Random rng = new Random();
-//		int start = -1;
-//		int end = -1;
-//		while (start == end) {
-//			start = rng.nextInt(20);
-//			end = rng.nextInt(20);
-//		}
-//		WeightedGraph r = new WeightedGraph(20,45);
-//		r.cheapestPath(start, end);
+		RandomGraph r = new RandomGraph(20,45);
+		r.cheapestPath();
 	}
 	
 }
