@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * Main running class.
  * 
@@ -15,6 +17,19 @@ public class Main {
 		
 		WeightedGraph g = new WeightedGraph();
 		g.testGraph();
-		g.checkMatrix(0,4);
+		g.cheapestPath(0,4);
+		g.shortestPath(0, 4);
+		
+		//Generate random numbers as start and end points
+//		Random rng = new Random();
+//		int start = -1;
+//		int end = -1;
+//		while (start == end) {
+//			start = rng.nextInt(20);
+//			end = rng.nextInt(20);
+//		}
+//		WeightedGraph r = new WeightedGraph(20,45);
+//		r.cheapestPath(start, end);
 	}
+	
 }
