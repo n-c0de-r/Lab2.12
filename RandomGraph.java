@@ -9,144 +9,18 @@ import java.util.Random;
  * @author AlexanderStae
  * @version 11.07.2021
  */
-public class RandomGraph {
-
-	private int[][] matrix;
-
-	private ArrayList<Edge> edgeList;
-	private ArrayList<Vertex> vertices;
-	
-	private int start = 0;
-	private int end = 0;
+public class RandomGraph extends WeightedGraph {
 
 	/**
-	 * Constructor to make a new Graph with given number of vertices and edges.
+	 * Constructor to make a new random Graph with given
+	 * number of vertices and edges. Subclass to WeightedGraph.
 	 * 
 	 * @param v Number of vertices.
 	 * @param e Number of Edges.
 	 */
 	public RandomGraph(int v, int e) {
+		super();
 		generateMatrix(v, e);
-	}
-
-	/**
-	 * Checks any given matrix via Dijkstra's Algorithm
-	 * finding the cheapest path from start to goal.
-	 * 
-	 * @param start The vertex to start path from.
-	 * @param goal  The goal vertex to get to.
-	 */
-	private void cheapestPath(int start, int goal) {
-		// Initialize the amount of vertices to check
-		int toVisit = vertices.size();
-
-		// Initialize the start vertex
-		Vertex thisVertex = vertices.get(start);
-		thisVertex.setDistance(0);
-		int thisDist = thisVertex.getDistance();
-
-		int nextCheck = start;
-
-		// While not all are checked
-		while (toVisit != 0) {
-			// Get the current vertex
-			thisVertex = vertices.get(nextCheck);
-			thisDist = thisVertex.getDistance();
-			thisVertex.setVisited(true);
-
-			// Check all neighboring vertices
-			for (int i = 0; i < vertices.size(); i++) {
-				Vertex current = vertices.get(i);
-
-				// If the current vertices sum of distances is lower, update the current vertex
-				if (matrix[nextCheck][i] != 0
-					&& (thisDist + matrix[nextCheck][i]) < current.getDistance()
-					&& !current.isVisited()) {
-					current.setPrevious(thisVertex);
-					current.setDistance(thisDist + matrix[nextCheck][i]);
-				}
-			}
-
-			int smallestDist = Integer.MAX_VALUE;
-
-			// Find the next unvisited vertex with the smallest distance to check next
-			for (int i = 0; i < vertices.size(); i++) {
-				if (vertices.get(i).isVisited()) {
-					continue;
-				} else {
-					if (vertices.get(i).getDistance() < smallestDist) {
-						smallestDist = vertices.get(i).getDistance();
-						nextCheck = i;
-					}
-				}
-			}
-			toVisit--;
-		}
-		getPath("cheap", vertices.get(start), vertices.get(goal));
-	}
-	
-	public void cheapestPath() {
-		cheapestPath(start, end);
-	}
-
-	/**
-	 * Checks any given matrix via Dijkstra's Algorithm
-	 * finding the shortest path from start to goal.
-	 * 
-	 * @param start The vertex to start path from.
-	 * @param goal  The goal vertex to get to.
-	 */
-	private void shortestPath(int start, int goal) {
-		// Initialize the amount of vertices to check
-		int toVisit = vertices.size();
-
-		// Initialize the start vertex
-		Vertex thisVertex = vertices.get(start);
-		thisVertex.setDistance(0);
-		int thisDist = thisVertex.getDistance();
-
-		int nextCheck = start;
-
-		// While not all are checked
-		while (toVisit != 0) {
-			// Get the current vertex
-			thisVertex = vertices.get(nextCheck);
-			thisDist = thisVertex.getDistance();
-			thisVertex.setVisited(true);
-
-			// Check all neighboring vertices
-			for (int i = 0; i < vertices.size(); i++) {
-				Vertex current = vertices.get(i);
-
-				// If the current vertices sum of distances is lower, update the current vertex
-				if (matrix[nextCheck][i] != 0
-					&& (thisDist + 1) < current.getDistance()
-					&& !current.isVisited()) {
-					current.setPrevious(thisVertex);
-					current.setDistance(1);
-				}
-			}
-
-			int smallestDist = Integer.MAX_VALUE;
-
-			// Find the next unvisited vertex with the smallest distance to check next
-			for (int i = 0; i < vertices.size(); i++) {
-				if (vertices.get(i).isVisited()) {
-					continue;
-				} else {
-					if (vertices.get(i).getDistance() < smallestDist) {
-						smallestDist = vertices.get(i).getDistance();
-						nextCheck = i;
-					}
-				}
-			}
-			toVisit--;
-		}
-		getPath("short", vertices.get(start), vertices.get(goal));
-	}
-	
-	public void shortestPath() {
-		shortestPath(start, end);
 	}
 
 	/**
@@ -155,7 +29,7 @@ public class RandomGraph {
 	 * @param num Number of edges to create.
 	 */
 	private void generateEdges(int num) {
-		edgeList = new ArrayList<Edge>();
+		edges = new ArrayList<Edge>();
 
 		for (int i = 0; i < num; i++) {
 			Random rng = new Random();
@@ -168,7 +42,7 @@ public class RandomGraph {
 				v1 = rng.nextInt(vertices.size());
 				v2 = rng.nextInt(vertices.size());
 			}
-			edgeList.add(new Edge(vertices.get(v1), vertices.get(v2), w));
+			edges.add(new Edge(vertices.get(v1), vertices.get(v2), w));
 		}
 	}
 	
@@ -201,7 +75,7 @@ public class RandomGraph {
 
 		// Fill the matrix with weights of the edges
 		for (int i = 0; i < e; i++) {
-			Edge currentEdge = edgeList.get(i);
+			Edge currentEdge = edges.get(i);
 			Vertex startVertex = currentEdge.startVertex;
 			Vertex endVertex = currentEdge.endVertex;
 			int weight = currentEdge.weight;
@@ -228,48 +102,4 @@ public class RandomGraph {
 			names.remove(r);
 		}
 	}
-	
-	/**
-	 * Method that returns the resulting path.
-	 * 
-	 * @param end The goal vertex.
-	 */
-	private void getPath(String type, Vertex start, Vertex end) {
-
-		// After all is done, print out all distances. not really needed.
-//		for (Vertex v : vertices) {
-//			System.out.println("Distance to " + v.getName() + " is: " + v.getDistance());
-//		}
-
-		// When all is finished print the cheapest or shortest path to the end
-		System.out.println("The " + type + "est path from " + start.getName() + " to " + end.getName() + " is: "
-				+ end.getDistance());
-
-		String endName = end.getName();
-		String path = endName;
-		String lastName = "";
-		Vertex checking = end;
-		while (checking.getPrevious() != null) {
-			checking = checking.getPrevious();
-			lastName = checking.getName();
-			path = path + " <-- " + lastName;
-
-		}
-		System.out.println("The full " + type + "est path is: " + path);
-		System.out.println();
-		
-		//Reset visited vertices after printout for next method
-		resetVisits();
-	}
-	
-	/**
-	 * Resets all vertices to unvisited.
-	 */
-	private void resetVisits() {
-		for (Vertex v : vertices) {
-			v.setVisited(false);
-			v.setDistance(Integer.MAX_VALUE);
-		}
-	}
-
 }
