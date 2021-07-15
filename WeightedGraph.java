@@ -1,8 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * Main class that creates weighted graphs and checks cheapest and shortest
- * distances.
+ * Main class that creates weighted graphs.
  * 
  * @author n-c0de-r
  * @author AlexanderStae
@@ -10,171 +9,19 @@ import java.util.ArrayList;
  */
 public class WeightedGraph {
 
-	private int[][] matrix;
+	protected int[][] matrix;
+	
+	protected int start = 0;
+	protected int end = 0;
 
-	private ArrayList<Edge> edgeList;
-	private ArrayList<Vertex> vertices;
-
+	protected ArrayList<Edge> edges;
+	protected ArrayList<Vertex> vertices;
+	
 	/**
 	 * Empty constructor.
 	 */
 	public WeightedGraph() {
 		testGraph();
-	}
-
-	/**
-	 * Checks any given matrix via Dijkstra's Algorithm
-	 * finding the cheapest path from start to goal.
-	 * 
-	 * @param start The vertex to start path from.
-	 * @param goal  The goal vertex to get to.
-	 */
-	public void cheapestPath(int start, int goal) {
-		// Initialize the amount of vertices to check
-		int toVisit = vertices.size();
-
-		// Initialize the start vertex
-		Vertex thisVertex = vertices.get(start);
-		thisVertex.setDistance(0);
-		int thisDist = thisVertex.getDistance();
-
-		int nextCheck = start;
-
-		// While not all are checked
-		while (toVisit != 0) {
-			// Get the current vertex
-			thisVertex = vertices.get(nextCheck);
-			thisDist = thisVertex.getDistance();
-			thisVertex.setVisited(true);
-
-			// Check all neighboring vertices
-			for (int i = 0; i < vertices.size(); i++) {
-				Vertex current = vertices.get(i);
-
-				// If the current vertices sum of distances is lower, update the current vertex
-				if (matrix[nextCheck][i] != 0
-					&& (thisDist + matrix[nextCheck][i]) < current.getDistance()
-					&& !current.isVisited()) {
-					current.setPrevious(thisVertex);
-					current.setDistance(thisDist + matrix[nextCheck][i]);
-				}
-			}
-
-			int smallestDist = Integer.MAX_VALUE;
-
-			// Find the next unvisited vertex with the smallest distance to check next
-			for (int i = 0; i < vertices.size(); i++) {
-				if (vertices.get(i).isVisited()) {
-					continue;
-				} else {
-					if (vertices.get(i).getDistance() < smallestDist) {
-						smallestDist = vertices.get(i).getDistance();
-						nextCheck = i;
-					}
-				}
-			}
-			toVisit--;
-		}
-		getPath("cheap", vertices.get(start), vertices.get(goal));
-	}
-
-	/**
-	 * Checks any given matrix via Dijkstra's Algorithm
-	 * finding the shortest path from start to goal.
-	 * 
-	 * @param start The vertex to start path from.
-	 * @param goal  The goal vertex to get to.
-	 */
-	public void shortestPath(int start, int goal) {
-		// Initialize the amount of vertices to check
-		int toVisit = vertices.size();
-
-		// Initialize the start vertex
-		Vertex thisVertex = vertices.get(start);
-		thisVertex.setDistance(0);
-		int thisDist = thisVertex.getDistance();
-
-		int nextCheck = start;
-
-		// While not all are checked
-		while (toVisit != 0) {
-			// Get the current vertex
-			thisVertex = vertices.get(nextCheck);
-			thisDist = thisVertex.getDistance();
-			thisVertex.setVisited(true);
-
-			// Check all neighboring vertices
-			for (int i = 0; i < vertices.size(); i++) {
-				Vertex current = vertices.get(i);
-
-				// If the current vertices sum of distances is lower, update the current vertex
-				if (matrix[nextCheck][i] != 0
-					&& (thisDist + 1) < current.getDistance()
-					&& !current.isVisited()) {
-					current.setPrevious(thisVertex);
-					current.setDistance(1);
-				}
-			}
-
-			int smallestDist = Integer.MAX_VALUE;
-
-			// Find the next unvisited vertex with the smallest distance to check next
-			for (int i = 0; i < vertices.size(); i++) {
-				if (vertices.get(i).isVisited()) {
-					continue;
-				} else {
-					if (vertices.get(i).getDistance() < smallestDist) {
-						smallestDist = vertices.get(i).getDistance();
-						nextCheck = i;
-					}
-				}
-			}
-			toVisit--;
-		}
-		getPath("short", vertices.get(start), vertices.get(goal));
-	}
-
-	/**
-	 * Method that returns the resulting path.
-	 * 
-	 * @param end The goal vertex.
-	 */
-	private void getPath(String type, Vertex start, Vertex end) {
-
-		// After all is done, print out all distances. not really needed.
-//		for (Vertex v : vertices) {
-//			System.out.println("Distance to " + v.getName() + " is: " + v.getDistance());
-//		}
-
-		// When all is finished print the cheapest or shortest path to the end
-		System.out.println("The " + type + "est path from " + start.getName() + " to " + end.getName() + " is: "
-				+ end.getDistance());
-
-		String endName = end.getName();
-		String path = endName;
-		String lastName = "";
-		Vertex checking = end;
-		while (checking.getPrevious() != null) {
-			checking = checking.getPrevious();
-			lastName = checking.getName();
-			path = path + " <-- " + lastName;
-
-		}
-		System.out.println("The full " + type + "est path is: " + path);
-		System.out.println();
-		
-		//Reset visited vertices after printout for next method
-		resetVisits();
-	}
-	
-	/**
-	 * Resets all vertices to unvisited.
-	 */
-	private void resetVisits() {
-		for (Vertex v : vertices) {
-			v.setVisited(false);
-			v.setDistance(Integer.MAX_VALUE);
-		}
 	}
 	
 	/**
@@ -190,28 +37,30 @@ public class WeightedGraph {
 		vertices.add(new Vertex("E"));
 		vertices.add(new Vertex("F"));
 		vertices.add(new Vertex("G"));
+		vertices.add(new Vertex("H"));
 
 		// Create Edges connecting said vertices
-		edgeList = new ArrayList<Edge>();
-		edgeList.add(new Edge(vertices.get(0), vertices.get(3), 2));
-		edgeList.add(new Edge(vertices.get(3), vertices.get(1), 15));
-		edgeList.add(new Edge(vertices.get(1), vertices.get(4), 8));
-		edgeList.add(new Edge(vertices.get(2), vertices.get(4), 6));
-		edgeList.add(new Edge(vertices.get(2), vertices.get(0), 10));
-		edgeList.add(new Edge(vertices.get(2), vertices.get(3), 5));
-		edgeList.add(new Edge(vertices.get(3), vertices.get(5), 1));
-		edgeList.add(new Edge(vertices.get(4), vertices.get(5), 1));
-		edgeList.add(new Edge(vertices.get(0), vertices.get(6), 1));//Cheapest path
-		edgeList.add(new Edge(vertices.get(1), vertices.get(6), 1));
-		edgeList.add(new Edge(vertices.get(4), vertices.get(6), 1));
-		edgeList.add(new Edge(vertices.get(0),vertices.get(4),27)); //Shortest path!
+		edges = new ArrayList<Edge>();
+		edges.add(new Edge(vertices.get(0), vertices.get(3), 2));
+		edges.add(new Edge(vertices.get(3), vertices.get(1), 15));
+		edges.add(new Edge(vertices.get(1), vertices.get(4), 8));
+		edges.add(new Edge(vertices.get(2), vertices.get(4), 6));
+		edges.add(new Edge(vertices.get(2), vertices.get(0), 10));
+		edges.add(new Edge(vertices.get(2), vertices.get(3), 5));
+		edges.add(new Edge(vertices.get(3), vertices.get(5), 1));
+		edges.add(new Edge(vertices.get(4), vertices.get(5), 1));
+		edges.add(new Edge(vertices.get(0), vertices.get(6), 1));//Cheapest path
+		edges.add(new Edge(vertices.get(1), vertices.get(6), 1));
+		edges.add(new Edge(vertices.get(4), vertices.get(6), 1));
+		edges.add(new Edge(vertices.get(0),vertices.get(4),27)); //Shortest path!
+		edges.add(new Edge(vertices.get(5), vertices.get(7), 1));
 
 		// Create a new quadratic matrix of size of all vertices
 		matrix = new int[vertices.size()][vertices.size()];
 
 		// Fill the matrix with weights of the edges
-		for (int i = 0; i < edgeList.size(); i++) {
-			Edge currentEdge = edgeList.get(i);
+		for (int i = 0; i < edges.size(); i++) {
+			Edge currentEdge = edges.get(i);
 			Vertex startVertex = currentEdge.startVertex;
 			Vertex endVertex = currentEdge.endVertex;
 			int weight = currentEdge.weight;
