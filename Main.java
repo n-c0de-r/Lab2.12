@@ -13,16 +13,14 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println("----------Weighted Graph----------");
 		
-		WeightedGraph g = new WeightedGraph();
-		g.cheapestPath(0, 4);
-		g.shortestPath(0, 4);
+		System.out.println("----------Weighted Graph----------");
+		Dijkstra w = new Dijkstra(new WeightedGraph());
+		w.cheapestPath(0, 4);
+		w.shortestPath(0, 4);
 		
 		System.out.println("----------Random Graph----------");
-		
-		//Generate random numbers as start and end points
-		RandomGraph r = new RandomGraph(20,45);
+		Dijkstra r = new Dijkstra(new RandomGraph(20,45));
 		r.cheapestPath();
 		r.shortestPath();
 	}
