@@ -16,12 +16,14 @@ public class Dijkstra {
 	
 	/**
 	 * Checks any given matrix via Dijkstra's Algorithm
-	 * finding the cheapest path from start to goal.
+	 * finding the shortest or cheapest path from start to goal,
+	 * depending on the String of mode given as a parameter.
 	 * 
 	 * @param start The vertex to start path from.
 	 * @param goal  The goal vertex to get to.
+	 * @param mode	The mode by which the algorithm is looking for
 	 */
-	public void cheapestPath(int start, int goal) {
+	public void findPath(int start, int goal, String mode) {
 		// Initialize the amount of vertices to check
 		int toVisit = g.vertices.size();
 
@@ -42,13 +44,21 @@ public class Dijkstra {
 			// Check all neighboring vertices
 			for (int i = 0; i < g.vertices.size(); i++) {
 				Vertex current = g.vertices.get(i);
-
+				
+				// Checks if the shortest or cheapest path is looked for
+				int currentWeight = 0;
+				if (mode.toLowerCase().equals("short")) {
+					currentWeight = 1;
+				} else {
+					currentWeight = g.matrix[nextCheck][i];
+				}
+				
 				// If the current vertices sum of distances is lower, update the current vertex
 				if (g.matrix[nextCheck][i] != 0
-					&& (thisDist + g.matrix[nextCheck][i]) < current.getDistance()
-					&& !current.isVisited()) {
-					current.setPrevious(thisVertex);
-					current.setDistance(thisDist + g.matrix[nextCheck][i]);
+						&& (thisDist + currentWeight) < current.getDistance()
+						&& !current.isVisited()) {
+						current.setPrevious(thisVertex);
+						current.setDistance(thisDist + currentWeight);
 				}
 			}
 
@@ -67,71 +77,16 @@ public class Dijkstra {
 			}
 			toVisit--;
 		}
-		getPath("cheap", g.vertices.get(start), g.vertices.get(goal));
+		getPath(mode, g.vertices.get(start), g.vertices.get(goal));
 	}
-
+	
 	/**
-	 * Checks any given matrix via Dijkstra's Algorithm
-	 * finding the shortest path from start to goal.
-	 * 
-	 * @param start The vertex to start path from.
-	 * @param goal  The goal vertex to get to.
+	 * Overload method call to itself, with mode parameter only.
+	 *
+	 * @param mode	The mode by which the algorithm is looking for
 	 */
-	public void shortestPath(int start, int goal) {
-		// Initialize the amount of vertices to check
-		int toVisit = g.vertices.size();
-
-		// Initialize the start vertex
-		Vertex thisVertex = g.vertices.get(start);
-		thisVertex.setDistance(0);
-		int thisDist = thisVertex.getDistance();
-
-		int nextCheck = start;
-
-		// While not all are checked
-		while (toVisit != 0) {
-			// Get the current vertex
-			thisVertex = g.vertices.get(nextCheck);
-			thisDist = thisVertex.getDistance();
-			thisVertex.setVisited(true);
-
-			// Check all neighboring vertices
-			for (int i = 0; i < g.vertices.size(); i++) {
-				Vertex current = g.vertices.get(i);
-
-				// If the current vertices sum of distances is lower, update the current vertex
-				if (g.matrix[nextCheck][i] != 0
-					&& (thisDist + 1) < current.getDistance()
-					&& !current.isVisited()) {
-					current.setPrevious(thisVertex);
-					current.setDistance(thisDist + 1);
-				}
-			}
-
-			int smallestDist = Integer.MAX_VALUE;
-
-			// Find the next unvisited vertex with the smallest distance to check next
-			for (int i = 0; i < g.vertices.size(); i++) {
-				if (g.vertices.get(i).isVisited()) {
-					continue;
-				} else {
-					if (g.vertices.get(i).getDistance() < smallestDist) {
-						smallestDist = g.vertices.get(i).getDistance();
-						nextCheck = i;
-					}
-				}
-			}
-			toVisit--;
-		}
-		getPath("short", g.vertices.get(start), g.vertices.get(goal));
-	}
-	
-	public void cheapestPath() {
-		cheapestPath(g.start, g.end);
-	}
-	
-	public void shortestPath() {
-		shortestPath(g.start, g.end);
+	public void findPath(String mode) {
+		findPath(g.start, g.end, mode);
 	}
 	
 	/**
