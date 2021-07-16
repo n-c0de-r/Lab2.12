@@ -16,13 +16,13 @@ public class Main {
 		
 		System.out.println("----------Weighted Graph----------");
 		Dijkstra w = new Dijkstra(new WeightedGraph());
-		w.cheapestPath(0, 4);
-		w.shortestPath(0, 4);
+		w.findPath(0, 4, "cheap");
+		w.findPath(0, 4, "short");
 		
 		System.out.println("----------Random Graph----------");
 		Dijkstra r = new Dijkstra(new RandomGraph(20,45));
-		r.cheapestPath();
-		r.shortestPath();
+		r.findPath("cheap");
+		r.findPath("short");
 	}
 	
 }
